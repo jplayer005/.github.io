@@ -52,11 +52,15 @@ header{display:flex;align-items:center;gap:8px;padding:0 14px;padding-top:var(--
 /* ── SIDEBAR ── */
 .sidebar{width:var(--sidebar);background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
 .sidebar-header{padding:14px 14px 11px;border-bottom:1px solid var(--border);flex-shrink:0;}
-.sidebar-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:9px;}
-.sidebar-tools{display:flex;align-items:center;gap:6px;margin-bottom:9px;}
-.sidebar-sort-btn{display:flex;align-items:center;gap:5px;font-family:'Sora',sans-serif;font-size:11px;font-weight:500;color:var(--text3);background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:0 9px;height:28px;cursor:pointer;transition:background .15s;white-space:nowrap;}
-.sidebar-sort-btn:hover{background:var(--bg4);}
-.sidebar-sort-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.sidebar-title-row{display:flex;align-items:center;gap:6px;margin-bottom:9px;}
+.sidebar-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:var(--text3);flex:1;}
+.btn-collapse-all{display:none;align-items:center;gap:4px;font-family:'Sora',sans-serif;font-size:10px;font-weight:500;color:var(--text3);background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:0 8px;height:24px;cursor:pointer;transition:background .15s,color .15s;white-space:nowrap;flex-shrink:0;}
+.btn-collapse-all:hover{background:var(--bg4);color:var(--text2);}
+.btn-collapse-all svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s;}
+.btn-collapse-all.expanded svg{transform:rotate(180deg);}
+body.is-modular .btn-collapse-all{display:flex;}
+
+
 .search-box{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0 10px;height:34px;}
 .search-box svg{width:13px;height:13px;stroke:var(--text3);fill:none;stroke-width:1.8;stroke-linecap:round;flex-shrink:0;}
 .search-box input{flex:1;background:none;border:none;outline:none;font-family:'Sora',sans-serif;font-size:12px;color:var(--text);min-width:0;}
@@ -66,7 +70,7 @@ header{display:flex;align-items:center;gap:8px;padding:0 14px;padding-top:var(--
 .playlist::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px;}
 
 /* ── MÓDULOS ── */
-.module-header{display:flex;align-items:center;gap:7px;padding:7px 9px;border-radius:8px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);margin-bottom:2px;user-select:none;transition:background .15s;}
+.module-header{display:flex;align-items:center;gap:7px;padding:7px 9px;border-radius:8px;cursor:pointer;background:var(--bg3);border:1px solid var(--border);margin-bottom:2px;user-select:none;transition:background .15s,border-color .15s,opacity .15s;}
 .module-header:hover{background:var(--bg4);}
 .module-arrow{width:13px;height:13px;stroke:var(--text3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s;flex-shrink:0;}
 .module-header.collapsed .module-arrow{transform:rotate(-90deg);}
@@ -74,6 +78,20 @@ header{display:flex;align-items:center;gap:8px;padding:0 14px;padding-top:var(--
 .module-count{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);background:var(--bg4);border-radius:4px;padding:2px 6px;white-space:nowrap;flex-shrink:0;}
 .module-done-badge{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--green);background:rgba(52,211,153,.12);border-radius:4px;padding:2px 5px;white-space:nowrap;flex-shrink:0;}
 .module-body.collapsed{display:none;}
+/* drag handle */
+.module-drag-handle{display:flex;align-items:center;justify-content:center;width:18px;height:18px;flex-shrink:0;cursor:grab;opacity:.35;transition:opacity .15s;}
+.module-drag-handle:hover{opacity:.8;}
+.module-drag-handle:active{cursor:grabbing;}
+.module-drag-handle svg{width:12px;height:12px;stroke:var(--text2);fill:none;stroke-width:2;stroke-linecap:round;}
+/* drag wrapper */
+.module-wrap{position:relative;transition:margin .1s;}
+.module-wrap.drag-over-top::before,.module-wrap.drag-over-bottom::after{content:'';display:block;height:3px;background:var(--accent);border-radius:2px;margin:1px 0;}
+.module-wrap.drag-over-top::before{margin-bottom:3px;}
+.module-wrap.drag-over-bottom::after{margin-top:3px;}
+.module-wrap.dragging>.module-header{opacity:.35;border-style:dashed;}
+.module-wrap.dragging>.module-body{display:none !important;}
+/* touch ghost */
+#drag-ghost{position:fixed;pointer-events:none;z-index:9999;background:var(--bg2);border:1px solid var(--accent);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--accent2);font-family:'Sora',sans-serif;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 8px 24px rgba(0,0,0,.4);opacity:.92;display:none;}
 .section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);padding:10px 8px 6px;}
 .lesson-item{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:8px;cursor:pointer;transition:background .15s;border:1px solid transparent;margin-bottom:2px;}
 .lesson-item:hover{background:var(--bg3);}
@@ -125,13 +143,6 @@ video#main-video{max-width:100%;max-height:100%;width:100%;height:100%;object-fi
 .content-wrapper.active{display:flex;}
 .content-frame{flex:1;border:none;background:var(--bg2);}
 
-/* ── SUBTITLE OVERLAY ── */
-#subtitle-overlay{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:10;pointer-events:none;text-align:center;max-width:90%;width:max-content;}
-#subtitle-overlay .sub-line{display:inline-block;background:rgba(0,0,0,.75);color:#fff;font-size:15px;font-family:'Sora',sans-serif;font-weight:500;line-height:1.4;padding:4px 12px;border-radius:6px;margin:2px 0;white-space:pre-wrap;}
-#subtitle-overlay.hidden{display:none;}
-#subtitle-overlay.sub-style-white .sub-line{background:rgba(0,0,0,.75);color:#fff;}
-#subtitle-overlay.sub-style-yellow .sub-line{background:rgba(0,0,0,.75);color:#fbbf24;}
-#subtitle-overlay.sub-style-outline .sub-line{background:transparent;color:#fff;text-shadow:-1px -1px 2px #000,1px -1px 2px #000,-1px 1px 2px #000,1px 1px 2px #000;}
 
 /* ── REVIEW MODE OVERLAY ── */
 #review-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:250;flex-direction:column;overflow:hidden;}
@@ -177,18 +188,6 @@ video#main-video{max-width:100%;max-height:100%;width:100%;height:100%;object-fi
 .history-entry-play{width:22px;height:22px;border-radius:5px;background:rgba(108,99,255,.15);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .history-entry-play svg{width:10px;height:10px;fill:var(--accent2);stroke:none;}
 
-/* ── LEGENDA FILE INPUT ── */
-.sub-file-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.sub-badge{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);border-radius:5px;padding:2px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px;}
-.sub-clear-btn{font-size:10px;color:var(--red);background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);border-radius:5px;padding:2px 8px;cursor:pointer;white-space:nowrap;}
-.sub-style-row{display:flex;gap:5px;flex-wrap:wrap;}
-.sub-style-opt{font-size:11px;color:var(--text3);background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:3px 8px;cursor:pointer;transition:background .15s;}
-.sub-style-opt:hover{background:var(--bg4);}
-.sub-style-opt.active-sub{background:rgba(108,99,255,.15);border-color:rgba(108,99,255,.3);color:var(--accent2);}
-.sub-size-row{display:flex;align-items:center;gap:8px;margin-top:6px;}
-.sub-size-label{font-size:11px;color:var(--text3);}
-.sub-size-slider{flex:1;height:4px;-webkit-appearance:none;appearance:none;background:var(--bg4);border-radius:4px;outline:none;cursor:pointer;}
-.sub-size-slider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;background:var(--accent2);border-radius:50%;cursor:pointer;}
 
 /* ── TRANSCRIÇÃO ── */
 .transcription-modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;width:100%;max-width:520px;padding:22px;display:flex;flex-direction:column;gap:14px;max-height:90vh;overflow-y:auto;}
@@ -242,8 +241,7 @@ video#main-video{max-width:100%;max-height:100%;width:100%;height:100%;object-fi
 .ctrl-btn.primary svg{stroke:white;}
 .ctrl-btn.active-ctrl{background:rgba(251,191,36,.15);border-color:rgba(251,191,36,.4);}
 .ctrl-btn.active-ctrl svg{stroke:var(--amber);}
-.ctrl-btn.active-ctrl-pink{background:rgba(244,114,182,.15);border-color:rgba(244,114,182,.4);}
-.ctrl-btn.active-ctrl-pink svg{stroke:var(--pink);}
+
 .ctrl-btn.active-ctrl-green{background:rgba(52,211,153,.15);border-color:rgba(52,211,153,.4);}
 .ctrl-btn.active-ctrl-green svg{stroke:var(--green);}
 .speed-btn{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:0 10px;height:34px;cursor:pointer;transition:background .15s;}
@@ -392,9 +390,6 @@ video#main-video{max-width:100%;max-height:100%;width:100%;height:100%;object-fi
 .chapter-del:hover{background:rgba(248,113,113,.2);opacity:1;}
 .chapter-del svg{width:10px;height:10px;stroke:var(--red);fill:none;stroke-width:2;stroke-linecap:round;}
 
-/* ── LEGENDA MODAL ── */
-.subtitle-modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;width:100%;max-width:420px;padding:22px;display:flex;flex-direction:column;gap:14px;max-height:90vh;overflow-y:auto;}
-.subtitle-modal-box label{font-size:12px;color:var(--text2);font-weight:500;}
 
 /* ── GOOGLE DRIVE SYNC ── */
 .drive-btn{display:flex;align-items:center;gap:6px;font-family:'Sora',sans-serif;font-size:12px;font-weight:500;border:none;border-radius:8px;padding:0 11px;height:32px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
@@ -518,6 +513,8 @@ video#main-video{max-width:100%;max-height:100%;width:100%;height:100%;object-fi
 <body>
 
 <!-- Loading overlay -->
+<div id="drag-ghost"></div>
+
 <div id="loading-overlay">
   <div class="loading-spinner"></div>
   <div class="loading-text" id="loading-text">Lendo arquivos…</div>
@@ -618,50 +615,6 @@ video#main-video{max-width:100%;max-height:100%;width:100%;height:100%;object-fi
   </div>
 </div>
 
-<!-- Modal legendas -->
-<div class="modal-overlay" id="subtitle-modal">
-  <div class="subtitle-modal-box">
-    <div class="modal-title">Legendas sincronizadas</div>
-    <div style="display:flex;flex-direction:column;gap:12px;">
-      <div>
-        <label style="display:block;margin-bottom:6px;">Arquivo de legenda (.srt ou .vtt)</label>
-        <div class="sub-file-row">
-          <button class="modal-btn secondary" style="flex:0;min-width:auto;padding:0 12px;height:32px;font-size:12px;" onclick="document.getElementById('subtitle-file-input').click()">Escolher arquivo</button>
-          <span id="sub-file-name" class="sub-badge" style="display:none;"></span>
-          <button id="sub-clear-btn" class="sub-clear-btn" style="display:none;" onclick="clearSubtitles()">✕ remover</button>
-        </div>
-        <input type="file" id="subtitle-file-input" accept=".srt,.vtt" style="display:none" onchange="loadSubtitleFile(event)">
-      </div>
-      <div>
-        <label style="display:block;margin-bottom:6px;">Estilo</label>
-        <div class="sub-style-row">
-          <button class="sub-style-opt active-sub" onclick="setSubStyle('white',this)">Branco</button>
-          <button class="sub-style-opt" onclick="setSubStyle('yellow',this)">Amarelo</button>
-          <button class="sub-style-opt" onclick="setSubStyle('outline',this)">Contorno</button>
-        </div>
-      </div>
-      <div>
-        <div class="sub-size-row">
-          <span class="sub-size-label">Tamanho:</span>
-          <input type="range" class="sub-size-slider" id="sub-size-slider" min="11" max="26" value="15" oninput="setSubSize(this.value)">
-          <span id="sub-size-val" style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text3);min-width:28px;">15px</span>
-        </div>
-      </div>
-      <div>
-        <label style="display:block;margin-bottom:6px;">Delay (segundos)</label>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <button class="modal-btn secondary" style="flex:0;min-width:auto;width:32px;height:32px;font-size:16px;" onclick="adjustSubDelay(-0.5)">−</button>
-          <span id="sub-delay-val" style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text);min-width:50px;text-align:center;">0.0s</span>
-          <button class="modal-btn secondary" style="flex:0;min-width:auto;width:32px;height:32px;font-size:16px;" onclick="adjustSubDelay(0.5)">+</button>
-          <button class="modal-btn secondary" style="flex:0;min-width:auto;padding:0 10px;height:32px;font-size:11px;" onclick="resetSubDelay()">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="modal-btn secondary" onclick="document.getElementById('subtitle-modal').classList.remove('active')">Fechar</button>
-    </div>
-  </div>
-</div>
 
 <!-- Modal Transcrição Automática -->
 <div class="modal-overlay" id="transcription-modal">
@@ -830,10 +783,6 @@ video#main-video{max-width:100%;max-height:100%;width:100%;height:100%;object-fi
     <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/><polyline points="12 7 12 12 15 15"/></svg>
   </button>
 
-  <!-- Legendas -->
-  <button class="btn-icon" id="subtitle-btn" onclick="document.getElementById('subtitle-modal').classList.add('active')" title="Legendas sincronizadas">
-    <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h4M15 15h2M7 11h2M13 11h4"/></svg>
-  </button>
 
   <!-- Transcrição automática -->
   <button class="btn-icon" id="transcription-btn" onclick="openTranscriptionModal()" title="Transcrição automática (T)">
@@ -877,17 +826,14 @@ video#main-video{max-width:100%;max-height:100%;width:100%;height:100%;object-fi
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <div class="sidebar-title">Playlist</div>
-      <div class="sidebar-tools">
-        <button class="sidebar-sort-btn" id="sort-btn" onclick="cycleSortMode()" title="Ordenação">
-          <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
-          <span id="sort-label">Original</span>
-        </button>
-        <button class="sidebar-sort-btn" id="shuffle-btn" onclick="toggleShuffle()" title="Embaralhar">
-          <svg viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
-          Aleatório
+      <div class="sidebar-title-row">
+        <div class="sidebar-title">Playlist</div>
+        <button class="btn-collapse-all expanded" id="btn-collapse-all" onclick="toggleCollapseAll()" title="Recolher / expandir todos os módulos">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          <span id="collapse-all-label">Recolher</span>
         </button>
       </div>
+
       <div class="search-box">
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" placeholder="Buscar aula…" id="search-input" oninput="filterLessons()">
@@ -913,8 +859,7 @@ video#main-video{max-width:100%;max-height:100%;width:100%;height:100%;object-fi
         <p class="hint">Suporta .mp4 · .webm · .mkv · .avi · .mov · .xlsx · .csv · .pdf · .html · .docx</p>
       </div>
       <video id="main-video" style="display:none;" controls preload="metadata" playsinline></video>
-      <!-- Subtitle overlay -->
-      <div id="subtitle-overlay" class="hidden sub-style-white"></div>
+
     </div>
 
     <div class="controls-bar">
@@ -966,10 +911,7 @@ video#main-video{max-width:100%;max-height:100%;width:100%;height:100%;object-fi
         <button class="ctrl-btn" id="pip-btn" onclick="togglePiP()" title="Picture-in-Picture (I)" style="display:none;">
           <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><rect x="10" y="10" width="11" height="7" rx="1" fill="none" stroke-width="1.8"/></svg>
         </button>
-        <!-- Subtítulos rápido toggle -->
-        <button class="ctrl-btn" id="sub-toggle-btn" onclick="toggleSubtitleVisibility()" title="Mostrar/esconder legendas">
-          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h4M15 15h2"/></svg>
-        </button>
+
         <div class="ab-label" id="ab-label" style="display:none;">
           <span id="ab-label-text">A-B</span>
         </div>
@@ -1066,10 +1008,6 @@ let abState = 0, abA = 0, abB = 0;
 // Capítulos
 let chapters = [];
 
-// Ordenação
-let sortMode = 'orig';
-let shuffleMode = false;
-let shuffleOrder = [];
 
 // Tema
 let currentTheme = 'auto';
@@ -1078,13 +1016,6 @@ let currentTheme = 'auto';
 const FRAME_RATE = 30;
 let frameMode = false;
 
-// ── LEGENDAS ──
-let subtitleCues = [];
-let subDelay = 0;
-let subVisible = true;
-let subStyle = 'white';
-let subSize = 15;
-let currentSubCueIdx = -1;
 
 // ── MODO REVISÃO ──
 let reviewItems = [];
@@ -1114,7 +1045,7 @@ const timeDur    = document.getElementById('time-dur');
 const playIcon   = document.getElementById('play-icon');
 const doneCount  = document.getElementById('done-count');
 const totalCount = document.getElementById('total-count');
-const subOverlay = document.getElementById('subtitle-overlay');
+
 
 /* ═══════════════════════════════════════════
    HELPERS
@@ -1189,7 +1120,7 @@ function saveToStorage(){
       done:[...done].map(i=>lessons[i]?lessons[i].name:null).filter(Boolean),
       positions, speedIdx,
       currentName: currentIdx>=0&&lessons[currentIdx] ? lessons[currentIdx].name : null,
-      savedAt: Date.now(), studyStats, notes, chapters, sortMode, shuffleMode,
+      savedAt: Date.now(), studyStats, notes, chapters,
       studyHistory
     };
     localStorage.setItem(buildStorageKey(), JSON.stringify(data));
@@ -1215,58 +1146,185 @@ function applyStoredProgress(data){
   if(data.studyStats)   studyStats = Object.assign(studyStats, data.studyStats);
   if(data.notes)        { notes=data.notes; renderNotes(); }
   if(data.chapters)     chapters = data.chapters;
-  if(data.sortMode)     { sortMode=data.sortMode; updateSortLabel(); }
-  if(data.shuffleMode!==undefined){ shuffleMode=data.shuffleMode; updateShuffleBtn(); }
   if(data.studyHistory) studyHistory = data.studyHistory;
   updateDoneCount();
 }
 
-/* ═══════════════════════════════════════════
-   ORDENAÇÃO E EMBARALHAMENTO
-═══════════════════════════════════════════ */
-const SORT_MODES  = ['orig','az','za'];
-const SORT_LABELS = ['Original','A→Z','Z→A'];
 
-function cycleSortMode(){
-  const idx = SORT_MODES.indexOf(sortMode);
-  sortMode = SORT_MODES[(idx+1) % SORT_MODES.length];
-  shuffleMode = false; updateShuffleBtn();
-  updateSortLabel();
-  buildSortedLessons();
-  isModular ? renderModularPlaylist() : renderPlaylist(sortedLessons);
-  saveToStorage();
-}
-function updateSortLabel(){
-  const i = SORT_MODES.indexOf(sortMode);
-  document.getElementById('sort-label').textContent = SORT_LABELS[i] || 'Original';
-}
-function toggleShuffle(){
-  shuffleMode = !shuffleMode;
-  if(shuffleMode){ sortMode='orig'; updateSortLabel(); }
-  updateShuffleBtn();
-  buildSortedLessons();
-  isModular ? renderModularPlaylist() : renderPlaylist(sortedLessons);
-  saveToStorage();
-}
-function updateShuffleBtn(){
-  const btn = document.getElementById('shuffle-btn');
-  btn.style.background    = shuffleMode ? 'rgba(108,99,255,.15)' : '';
-  btn.style.color         = shuffleMode ? 'var(--accent2)' : '';
-  btn.style.borderColor   = shuffleMode ? 'rgba(108,99,255,.3)' : '';
-}
 function buildSortedLessons(){
-  if(shuffleMode){
-    const arr = [...lessons];
-    for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
-    sortedLessons = arr;
-  } else if(sortMode==='az'){
-    sortedLessons = [...lessons].sort((a,b)=>naturalSort(a.name, b.name));
-  } else if(sortMode==='za'){
-    sortedLessons = [...lessons].sort((a,b)=>naturalSort(b.name, a.name));
-  } else {
-    sortedLessons = [...lessons];
-  }
+  sortedLessons = [...lessons];
 }
+
+/* ═══════════════════════════════════════════
+   ORDENAÇÃO MANUAL DE MÓDULOS (drag-and-drop)
+═══════════════════════════════════════════ */
+let moduleDragSrc = null;   // wrap element sendo arrastado
+let moduleDragMod = null;   // objeto módulo sendo arrastado
+let moduleDragArr = null;   // array (modules) de onde veio
+let touchStartY   = 0;
+let touchGhost    = null;
+
+function attachModuleDrag(wrap, mod, arr){
+  const handle = wrap.querySelector('.module-drag-handle');
+  if(!handle) return;
+
+  // ── MOUSE ──
+  handle.addEventListener('mousedown', e=>{
+    if(e.button !== 0) return;
+    e.preventDefault();
+    startDrag(wrap, mod, arr);
+
+    function onMove(ev){
+      updateDragOver(ev.clientX, ev.clientY);
+    }
+    function onUp(){
+      endDrag();
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+
+  // ── TOUCH ──
+  handle.addEventListener('touchstart', e=>{
+    const t = e.touches[0];
+    touchStartY = t.clientY;
+    startDrag(wrap, mod, arr);
+    showGhost(mod.name, t.clientX, t.clientY);
+  }, {passive:true});
+
+  handle.addEventListener('touchmove', e=>{
+    const t = e.touches[0];
+    moveGhost(t.clientX, t.clientY);
+    updateDragOver(t.clientX, t.clientY);
+    // scroll automático da sidebar
+    const sidebar = document.getElementById('sidebar');
+    const r = sidebar.getBoundingClientRect();
+    if(t.clientY < r.top + 60)       sidebar.scrollBy(0,-8);
+    else if(t.clientY > r.bottom - 60) sidebar.scrollBy(0, 8);
+  }, {passive:true});
+
+  handle.addEventListener('touchend', ()=>{
+    hideGhost();
+    endDrag();
+  });
+}
+
+function startDrag(wrap, mod, arr){
+  moduleDragSrc = wrap;
+  moduleDragMod = mod;
+  moduleDragArr = arr;
+  wrap.classList.add('dragging');
+}
+
+function showGhost(name, x, y){
+  touchGhost = document.getElementById('drag-ghost');
+  touchGhost.textContent = name;
+  touchGhost.style.display = 'block';
+  moveGhost(x, y);
+}
+function moveGhost(x, y){
+  if(!touchGhost) return;
+  touchGhost.style.left = (x - 110)+'px';
+  touchGhost.style.top  = (y - 20)+'px';
+}
+function hideGhost(){
+  if(touchGhost){ touchGhost.style.display='none'; touchGhost=null; }
+}
+
+function getModuleWraps(){
+  return Array.from(playlistEl.querySelectorAll(':scope > .module-wrap'));
+}
+
+function updateDragOver(cx, cy){
+  getModuleWraps().forEach(w=>{
+    w.classList.remove('drag-over-top','drag-over-bottom');
+    if(w === moduleDragSrc) return;
+    const r = w.getBoundingClientRect();
+    if(cy >= r.top && cy <= r.bottom){
+      if(cy < r.top + r.height/2) w.classList.add('drag-over-top');
+      else                         w.classList.add('drag-over-bottom');
+    }
+  });
+}
+
+function endDrag(){
+  if(!moduleDragSrc) return;
+  moduleDragSrc.classList.remove('dragging');
+
+  // Encontra o alvo com indicador
+  let targetWrap = null, position = null;
+  getModuleWraps().forEach(w=>{
+    if(w.classList.contains('drag-over-top'))    { targetWrap=w; position='before'; }
+    if(w.classList.contains('drag-over-bottom')) { targetWrap=w; position='after'; }
+    w.classList.remove('drag-over-top','drag-over-bottom');
+  });
+
+  if(targetWrap && targetWrap !== moduleDragSrc){
+    const targetName = targetWrap.dataset.modName;
+    const srcIdx     = moduleDragArr.findIndex(m=>m.name===moduleDragMod.name);
+    const tgtIdx     = moduleDragArr.findIndex(m=>m.name===targetName);
+    if(srcIdx !== -1 && tgtIdx !== -1){
+      // Remove da posição original
+      const [moved] = moduleDragArr.splice(srcIdx, 1);
+      // Recalcula índice alvo após remoção
+      const newTgt = moduleDragArr.findIndex(m=>m.name===targetName);
+      const insertAt = position==='before' ? newTgt : newTgt+1;
+      moduleDragArr.splice(insertAt, 0, moved);
+
+      // Reconstrói índices de aulas e re-renderiza
+      rebuildLessonsFromModules();
+      buildSortedLessons();
+      renderModularPlaylist();
+      updatePlaylistActive();
+      saveModuleOrder();
+      saveToStorage();
+      toast('Módulos reordenados ✓');
+    }
+  }
+
+  moduleDragSrc = null;
+  moduleDragMod = null;
+  moduleDragArr = null;
+}
+
+// ── Persistência da ordem dos módulos ──
+function saveModuleOrder(){
+  try{
+    const order = flatModuleNames(modules);
+    localStorage.setItem(buildStorageKey()+'_modorder', JSON.stringify(order));
+  }catch(e){}
+}
+
+function loadModuleOrder(){
+  try{
+    const raw = localStorage.getItem(buildStorageKey()+'_modorder');
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+
+function flatModuleNames(mods){
+  const names = [];
+  mods.forEach(m=>{ names.push(m.name); (m.subModules||[]).forEach(s=>names.push('\t'+s.name)); });
+  return names;
+}
+
+function applyModuleOrder(savedNames){
+  if(!savedNames || !savedNames.length) return;
+  // Reordena apenas o nível raiz (sem tab)
+  const rootNames = savedNames.filter(n=>!n.startsWith('\t'));
+  const reordered = [];
+  rootNames.forEach(name=>{
+    const m = modules.find(m=>m.name===name);
+    if(m) reordered.push(m);
+  });
+  // Adiciona módulos novos (não salvos) ao final
+  modules.forEach(m=>{ if(!reordered.includes(m)) reordered.push(m); });
+  modules.length = 0;
+  reordered.forEach(m=>modules.push(m));
+}
+
 
 /* ═══════════════════════════════════════════
    FRAME A FRAME
@@ -1301,120 +1359,6 @@ video.addEventListener('pause', ()=>{
   playIcon.innerHTML=`<polygon points="5 3 19 12 5 21 5 3"/>`;
 });
 
-/* ═══════════════════════════════════════════
-   LEGENDAS SINCRONIZADAS
-═══════════════════════════════════════════ */
-function parseSRT(text){
-  const cues = [];
-  const blocks = text.trim().split(/\n\s*\n/);
-  for(const block of blocks){
-    const lines = block.trim().split('\n');
-    if(lines.length < 3) continue;
-    const tsLine = lines.find(l => l.includes('-->'));
-    if(!tsLine) continue;
-    const [startStr, endStr] = tsLine.split('-->').map(s=>s.trim());
-    const start = parseSRTTime(startStr);
-    const end   = parseSRTTime(endStr);
-    if(isNaN(start)||isNaN(end)) continue;
-    const tsIdx = lines.indexOf(tsLine);
-    const text  = lines.slice(tsIdx+1).join('\n').replace(/<[^>]+>/g,'');
-    if(text.trim()) cues.push({start, end, text: text.trim()});
-  }
-  return cues;
-}
-function parseSRTTime(s){
-  const m = s.replace(',','.').match(/(\d+):(\d+):(\d+)\.(\d+)/);
-  if(!m) return NaN;
-  return parseInt(m[1])*3600 + parseInt(m[2])*60 + parseInt(m[3]) + parseInt(m[4])/1000;
-}
-function parseVTT(text){
-  const cleaned = text.replace(/WEBVTT[^\n]*\n/,'').replace(/NOTE[\s\S]*?\n\n/g,'');
-  return parseSRT(cleaned);
-}
-
-function loadSubtitleFile(event){
-  const file = event.target.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const text = e.target.result;
-    const e2 = ext(file.name);
-    subtitleCues = (e2==='vtt') ? parseVTT(text) : parseSRT(text);
-    if(!subtitleCues.length){ toast('Nenhuma legenda encontrada no arquivo'); return; }
-    subVisible = true;
-    subOverlay.classList.remove('hidden');
-    updateSubtitleBtnState();
-    document.getElementById('sub-file-name').textContent = file.name;
-    document.getElementById('sub-file-name').style.display = 'inline-block';
-    document.getElementById('sub-clear-btn').style.display = 'inline-block';
-    document.getElementById('subtitle-btn').classList.add('active-btn');
-    toast(`${subtitleCues.length} legenda(s) carregada(s) ✓`);
-    currentSubCueIdx = -1;
-  };
-  reader.readAsText(file, 'UTF-8');
-  event.target.value = '';
-}
-
-function clearSubtitles(){
-  subtitleCues = [];
-  subOverlay.innerHTML = '';
-  subOverlay.classList.add('hidden');
-  document.getElementById('sub-file-name').style.display = 'none';
-  document.getElementById('sub-clear-btn').style.display = 'none';
-  document.getElementById('subtitle-btn').classList.remove('active-btn');
-  currentSubCueIdx = -1;
-  toast('Legenda removida');
-}
-
-function toggleSubtitleVisibility(){
-  if(!subtitleCues.length){ toast('Nenhuma legenda carregada'); return; }
-  subVisible = !subVisible;
-  subOverlay.classList.toggle('hidden', !subVisible);
-  updateSubtitleBtnState();
-}
-
-function updateSubtitleBtnState(){
-  const btn = document.getElementById('sub-toggle-btn');
-  btn.classList.toggle('active-ctrl-pink', subtitleCues.length > 0 && subVisible);
-}
-
-function setSubStyle(style, el){
-  subStyle = style;
-  subOverlay.className = `sub-style-${style}` + (subOverlay.classList.contains('hidden') ? ' hidden' : '');
-  document.querySelectorAll('.sub-style-opt').forEach(b=>b.classList.remove('active-sub'));
-  el.classList.add('active-sub');
-}
-
-function setSubSize(val){
-  subSize = parseInt(val);
-  document.getElementById('sub-size-val').textContent = val+'px';
-  subOverlay.style.fontSize = val+'px';
-}
-
-function adjustSubDelay(delta){
-  subDelay = Math.round((subDelay + delta) * 10) / 10;
-  document.getElementById('sub-delay-val').textContent = (subDelay >= 0 ? '+' : '') + subDelay.toFixed(1) + 's';
-}
-function resetSubDelay(){
-  subDelay = 0;
-  document.getElementById('sub-delay-val').textContent = '0.0s';
-}
-
-function updateSubtitleOverlay(currentTime){
-  if(!subtitleCues.length || !subVisible) return;
-  const t = currentTime - subDelay;
-  const activeCues = subtitleCues.filter(c => t >= c.start && t <= c.end);
-  const key = activeCues.map(c=>c.text).join('||');
-  const prevKey = subOverlay.dataset.cueKey || '';
-  if(key === prevKey) return;
-  subOverlay.dataset.cueKey = key;
-  if(!activeCues.length){
-    subOverlay.innerHTML = '';
-    return;
-  }
-  subOverlay.innerHTML = activeCues.map(c =>
-    `<div class="sub-line">${escH(c.text).replace(/\n/g,'<br>')}</div>`
-  ).join('');
-}
 
 /* ═══════════════════════════════════════════
    TRANSCRIÇÃO AUTOMÁTICA (Web Speech API)
@@ -2113,7 +2057,7 @@ video.addEventListener('timeupdate',()=>{
     clearTimeout(saveTimer); saveTimer = setTimeout(saveToStorage, 5000);
   }
   checkABLoop();
-  updateSubtitleOverlay(video.currentTime);
+
 });
 
 function addNote(isMob){
@@ -2368,6 +2312,12 @@ async function processDirectory(dir, merge){
       if(merge){ modules=[...modules,...normalizedModules]; }
       else      { modules=normalizedModules; lessons=[]; done=new Set(); }
       isModular = true;
+      document.body.classList.add('is-modular');
+      // Primeiro rebuild para gerar chave de storage correta
+      rebuildLessonsFromModules();
+      // Aplica ordem customizada (se existir)
+      if(!merge) applyModuleOrder(loadModuleOrder());
+      // Rebuild final com ordem correta
       rebuildLessonsFromModules();
       const stored = loadFromStorage();
       if(stored) applyStoredProgress(stored);
@@ -2468,7 +2418,7 @@ function loadFiles(files, merge, extras=[]){
   if(!vids.length && !extras.length){ toast('Nenhum arquivo encontrado'); return; }
   if(!vids.length && !merge){ 
     extraFiles = extras.map(e=>({...e, type:fileType(e.name), url:URL.createObjectURL(e.file)}));
-    isModular=false; modules=[];
+    isModular=false; modules=[]; document.body.classList.remove('is-modular');
     buildSortedLessons();
     renderPlaylist(sortedLessons);
     toast(`${extras.length} arquivo(s) carregado(s)`);
@@ -2479,7 +2429,7 @@ function loadFiles(files, merge, extras=[]){
     done=new Set(); Object.keys(lessonTimes).forEach(k=>delete lessonTimes[k]);
     lessons   = vids.map((f,i)=>({file:f, url:URL.createObjectURL(f), name:f.name.replace(/\.[^.]+$/,''), idx:i}));
     extraFiles= extras.map(e=>({...e, type:fileType(e.name), url:URL.createObjectURL(e.file)}));
-    isModular=false; modules=[];
+    isModular=false; modules=[]; document.body.classList.remove('is-modular');
     const stored=loadFromStorage(); if(stored) applyStoredProgress(stored);
   } else {
     const off = lessons.length;
@@ -2518,23 +2468,66 @@ function renderModularPlaylist(){
   totalCount.textContent = lessons.length; updateDoneCount();
   playlistEl.innerHTML   = '';
 
-  function renderMod(mod, container, depth){
+  function renderMod(mod, container, depth, parentModArray){
     const key = mod.name;
     if(!(key in collapsedModules)) collapsedModules[key]=false;
     const idxs   = collectModuleLessonIdxs(mod);
     const modDone= idxs.filter(i=>done.has(i)).length;
     const totalItems = idxs.length + ((mod.extras||[]).length);
 
+    // Wrap div para drag (apenas módulos de nível 0)
+    const wrap = document.createElement('div');
+    wrap.className = 'module-wrap';
+    wrap.dataset.modName = mod.name;
+
     const header = document.createElement('div');
     header.className = 'module-header'+(collapsedModules[key]?' collapsed':'');
     header.style.marginLeft = (depth*12)+'px';
-    header.innerHTML = `<svg class="module-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg><span class="module-title">${escH(mod.name)}</span><span class="module-count">${totalItems} item${totalItems!==1?'s':''}</span>${modDone>0?`<span class="module-done-badge">${modDone}✓</span>`:''}`;
+
+    // Handle de arrasto (apenas para nível 0)
+    if(depth === 0){
+      const handle = document.createElement('div');
+      handle.className = 'module-drag-handle';
+      handle.title = 'Arrastar para reordenar';
+      handle.innerHTML = `<svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/></svg>`;
+      // impede que o handle expanda/recolha o módulo
+      handle.addEventListener('mousedown', e=>e.stopPropagation());
+      handle.addEventListener('touchstart', e=>e.stopPropagation(), {passive:true});
+      header.appendChild(handle);
+    }
+
+    const arrow = document.createElement('svg');
+    arrow.setAttribute('viewBox','0 0 24 24');
+    arrow.classList.add('module-arrow');
+    arrow.innerHTML = `<polyline points="6 9 12 15 18 9"/>`;
+    header.appendChild(arrow);
+
+    const title = document.createElement('span');
+    title.className = 'module-title';
+    title.textContent = mod.name;
+    header.appendChild(title);
+
+    const countBadge = document.createElement('span');
+    countBadge.className = 'module-count';
+    countBadge.textContent = `${totalItems} item${totalItems!==1?'s':''}`;
+    header.appendChild(countBadge);
+
+    if(modDone > 0){
+      const doneBadge = document.createElement('span');
+      doneBadge.className = 'module-done-badge';
+      doneBadge.textContent = `${modDone}✓`;
+      header.appendChild(doneBadge);
+    }
 
     const body = document.createElement('div');
     body.className = 'module-body'+(collapsedModules[key]?' collapsed':'');
 
-    header.onclick = ()=>toggleModule(key, header, body);
-    container.appendChild(header);
+    header.addEventListener('click', e=>{
+      if(e.target.closest('.module-drag-handle')) return;
+      toggleModule(key, header, body);
+    });
+
+    wrap.appendChild(header);
 
     if(mod.extras && mod.extras.length){
       const eu = mod.extras.map(e=>({...e, type:fileType(e.name), url:URL.createObjectURL(e.file)}));
@@ -2546,11 +2539,16 @@ function renderModularPlaylist(){
       const l=byFile.get(f.name); if(l) body.appendChild(buildLessonItem(l, (depth+1)*12));
     }
 
-    (mod.subModules||[]).forEach(sub=>renderMod(sub, body, depth+1));
-    container.appendChild(body);
+    (mod.subModules||[]).forEach(sub=>renderMod(sub, body, depth+1, mod.subModules));
+    wrap.appendChild(body);
+    container.appendChild(wrap);
+
+    // Drag-and-drop apenas para nível 0
+    if(depth === 0) attachModuleDrag(wrap, mod, parentModArray);
   }
 
-  modules.forEach(mod=>renderMod(mod, playlistEl, 0));
+  modules.forEach(mod=>renderMod(mod, playlistEl, 0, modules));
+  updateCollapseAllBtn();
 }
 
 function collectModuleLessonIdxs(mod){
@@ -2564,6 +2562,38 @@ function toggleModule(key, header, body){
   collapsedModules[key] = !collapsedModules[key];
   header.classList.toggle('collapsed', collapsedModules[key]);
   body.classList.toggle('collapsed', collapsedModules[key]);
+  updateCollapseAllBtn();
+}
+
+function toggleCollapseAll(){
+  const allKeys = Object.keys(collapsedModules);
+  const anyExpanded = allKeys.some(k => !collapsedModules[k]);
+  if(anyExpanded) collapseAllModules();
+  else            expandAllModules();
+}
+
+function collapseAllModules(){
+  Object.keys(collapsedModules).forEach(k => collapsedModules[k] = true);
+  document.querySelectorAll('.module-header').forEach(h => h.classList.add('collapsed'));
+  document.querySelectorAll('.module-body').forEach(b => b.classList.add('collapsed'));
+  updateCollapseAllBtn();
+}
+
+function expandAllModules(){
+  Object.keys(collapsedModules).forEach(k => collapsedModules[k] = false);
+  document.querySelectorAll('.module-header').forEach(h => h.classList.remove('collapsed'));
+  document.querySelectorAll('.module-body').forEach(b => b.classList.remove('collapsed'));
+  updateCollapseAllBtn();
+}
+
+function updateCollapseAllBtn(){
+  const btn   = document.getElementById('btn-collapse-all');
+  const label = document.getElementById('collapse-all-label');
+  if(!btn) return;
+  const allKeys    = Object.keys(collapsedModules);
+  const anyExpanded = allKeys.some(k => !collapsedModules[k]);
+  btn.classList.toggle('expanded', anyExpanded);
+  label.textContent = anyExpanded ? 'Recolher' : 'Expandir';
 }
 
 function buildLessonItem(l, indent=0){
@@ -2701,8 +2731,6 @@ function playLesson(idx){
   seekFill.style.width='0%';
   timeCur.textContent='0:00'; timeDur.textContent='0:00';
 
-  subOverlay.innerHTML = '';
-  subOverlay.dataset.cueKey = '';
 
   const savedTime=lessonTimes[idx];
   if(savedTime&&savedTime>2){
@@ -2886,7 +2914,7 @@ function showModal(title, desc, actions){
 }
 function closeModal(){ document.getElementById('modal-overlay').classList.remove('active'); }
 
-['modal-overlay','progress-modal','stats-modal','shortcuts-modal','theme-modal','xlsx-modal','subtitle-modal'].forEach(id=>{
+['modal-overlay','progress-modal','stats-modal','shortcuts-modal','theme-modal','xlsx-modal'].forEach(id=>{
   const el=document.getElementById(id); if(!el) return;
   el.addEventListener('click', e=>{
     if(e.target===el){
@@ -3203,8 +3231,6 @@ function driveBuildPayload(){
     studyStats,
     notes,
     chapters,
-    sortMode,
-    shuffleMode,
     studyHistory
   };
 }
